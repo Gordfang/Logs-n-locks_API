@@ -34,7 +34,12 @@ module.exports.routes = {
 
   '/': {
     view: 'homepage'
+  },
+  '/LockID':{
+	controler: 'LockController',
+	action: 'IdLock'  
   }
+  
 
   /***************************************************************************
   *                                                                          *
