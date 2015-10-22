@@ -1,5 +1,5 @@
 {
-  "name": "logs-n-locks",
+  "name": "ServeurSails",
   "private": true,
   "version": "0.0.0",
   "description": "a Sails application",
@@ -30,7 +30,7 @@
   "main": "app.js",
   "repository": {
     "type": "git",
-    "url": "git://github.com/anonymous node/sails user/logs-n-locks.git"
+    "url": "git://github.com/anonymous node/sails user/ServeurSails.git"
   },
   "author": "anonymous node/sails user",
   "license": ""

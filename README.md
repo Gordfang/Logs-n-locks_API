@@ -1,3 +1,3 @@
-# logs-n-locks
+# ServeurSails
 
 a [Sails](http://sailsjs.org) application
