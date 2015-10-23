@@ -37,8 +37,10 @@ module.exports.routes = {
   },
   '/LockId': 'LockController.IdLock',
   '/LockName': 'LockController.NameLock',
-  '/PasswdChange': 'UserController.ChangePass'
+  '/PasswdChange': 'UserController.ChangePass',
 
+  
+  '/ListUsersForLock': 'LockController.ListUsersForLock',
   /*
   '/LockID':{
 	controler: 'LockController',

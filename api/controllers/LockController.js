@@ -46,5 +46,19 @@ module.exports = {
 			}
 		})
 	},
+	
+	ListUsersForLock: function(req,res){
+		var param = req.allParams();
+		console.log("ID Lock= "+param.id);
+		Lock.findOne(param.id).exec(function (err, lock) {
+			if (err) return res.serverError(err);
+			if (!lock) {console.log("Error 1 : List User for Lock"); }
+			else {
+				for(var i = 0; i <  lock.users.length; i++){
+					console.log(lock.users[i]);
+				}
+			}
+		});
+	},
 };
 
