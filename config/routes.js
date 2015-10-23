@@ -36,9 +36,7 @@ module.exports.routes = {
     view: 'homepage'
   },
   '/LockId': 'LockController.IdLock',
-  '/LockName': 'LockController.NameLock',
-  '/PasswdChange': 'UserController.ChangePass'
-
+  '/LockName': 'LockController.NameLock'
   /*
   '/LockID':{
 	controler: 'LockController',
