@@ -26,6 +26,10 @@ module.exports = {
 		type: "string",
 		required: true,
 	},
+	locks:{
+		collection: 'lock',
+		via: 'users'
+	}
   }
 };
 
