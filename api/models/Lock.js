@@ -16,7 +16,11 @@ module.exports = {
 	isOpen:{
 		type: "boolean",
 		required: true
-	},	
+	},
+	users:{
+		collection: 'user',
+		via: 'locks'
+	}
   }
 };
 
