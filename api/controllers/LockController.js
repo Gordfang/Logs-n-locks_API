@@ -29,7 +29,6 @@ module.exports = {
 	
 	//// Changement Nom Lock
 	NameLock: function(req,res){
-		IdLock: function(req,res){
 		var param = req.allParams();
 		console.log("ID= "+param.id);
 		console.log("NameLock= "+param.nameLock);
