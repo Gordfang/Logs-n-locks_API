@@ -8,24 +8,44 @@
 module.exports = {
 	//// Changement Etat IsOpen
 	IdLock: function(req,res){
-		lock.update({id:1},{IsOpen:true}).exec(function afterwards(err,updated){
-			if(err){
-				console.log("error changement IsOpen");
-				return;
+		var param = req.allParams();
+		console.log("param= "+param.id);
+		console.log("ID= "+param.id);
+		console.log("Isopen= "+param.isOpen);
+		Lock.findOne(param.id).exec(function (err, lock) {
+			if (err) return res.serverError(err);
+			if (!lock) { console.log("Error 1 : changement IsOpen"); }
+			else {
+				// do stuff
+				lock.isOpen = param.isOpen;
+				lock.save(function (err) {
+				if (err) return res.serverError(err);
+					// your change to the user was saved.
+					console.log("Success 1 : changement IsOpen");
+				});
 			}
-			console.log("Changement IsOpen success");
-		});
+		})
 	},
 	
 	//// Changement Nom Lock
 	NameLock: function(req,res){
-	lock.update({id:''},{nameLock:''}).exec(function afterwards(err,updated){
-			if(err){
-				console.log("error changement nameLock");
-				return;
+		IdLock: function(req,res){
+		var param = req.allParams();
+		console.log("ID= "+param.id);
+		console.log("NameLock= "+param.nameLock);
+		Lock.findOne(param.id).exec(function (err, lock) {
+			if (err) return res.serverError(err);
+			if (!lock) { console.log("Error 1 : changement nameLock"); }
+			else {
+				// do stuff
+				lock.nameLock = param.nameLock;
+				lock.save(function (err) {
+				if (err) return res.serverError(err);
+					// your change to the user was saved.
+					console.log("Success 1 : changement nameLock");
+				});
 			}
-			console.log("Changement nameLock success");
-		});
+		})
 	},
 };
 
