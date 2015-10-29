@@ -24,7 +24,27 @@ module.exports = {
 				});
 			}
 		})
-	}
-	// 
+	},
+
+	//
+
+	ListLocksForUser: function(req,res){
+		var param = req.allParams();
+		console.log("id user= "+param.id);
+		User.findOne(param.id).populate('locks').exec(function (err, user) {
+			if (err) return res.serverError(err);
+			if (!user) { console.log("Error 1 : Affichage Locks"); }
+			else {
+				// do stuff
+				for(var i=0; i< user.locks.length; i++){
+					console.log("Id de la porte: "+user.locks[i].id);
+					Lock.findOne(user.locks[i].id).exec(function (err, lock) {
+						console.log("Nom de la porte: "+lock.nameLock);
+						console.log("Ouverte: "+lock.isOpen);
+					});
+				}
+			}
+		})
+	} 
 };
 
