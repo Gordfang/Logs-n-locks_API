@@ -48,6 +48,19 @@ module.exports = {
 		})
 	},
 
-	 
+	DeleteLockForUser: function(req, res){
+		var param = req.allParams();
+		console.log("id user= "+param.idUser);
+		console.log("id lock= "+param.idLock);
+		console.log("token= "+param.authorization);
+		User.findOne({id: param.idUser}).populate('locks').exec(function (err, user) {
+		if (err) return res.serverError(err);
+			if (!user) { console.log("Error 1 : Affichage Locks"); }
+			else {				
+				user.locks.remove(param.idLock);
+				user.save(console.log);
+			}
+		})
+	},
 };
 
