@@ -41,6 +41,11 @@ module.exports.routes = {
 
   '/ListLocksForUser': 'UserController.ListLocksForUser',
   '/ListUsersForLock': 'LockController.ListUsersForLock',
+
+ 'post /api/login': 'AuthentificationController.login',
+ 'get /api/refresh': 'AuthentificationController.refresh',
+
+ 
   /*
   '/LockID':{
 	controler: 'LockController',
