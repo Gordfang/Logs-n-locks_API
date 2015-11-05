@@ -44,7 +44,7 @@ module.exports = {
 					Lock.findOne(user.locks[i].id).exec(function (err, lock) {
 						console.log("Nom de la porte: "+lock.nameLock);
 						console.log("Ouverte: "+lock.isOpen);
-						var obj = {id: user.locks[i].id, name:lock.nameLock, ouverte: lock.isOpen};
+						var obj = {name:lock.nameLock, ouverte: lock.isOpen};
 						list.push(obj);
 					});
 				}
