@@ -35,17 +35,19 @@ module.exports.routes = {
   '/': {
     view: 'homepage'
   },
-  '/LockId': 'LockController.IdLock',
-  '/LockName': 'LockController.NameLock',
-  '/PasswdChange': 'UserController.ChangePass',
+  'post /LockId': 'LockController.IdLock',
+  'post /LockName': 'LockController.NameLock',
+  'post /PasswdChange': 'UserController.ChangePass',
 
-  '/ListLocksForUser': 'UserController.ListLocksForUser',
-  '/ListUsersForLock': 'LockController.ListUsersForLock',
+  'post /ListLocksForUser': 'UserController.ListLocksForUser',
+  'post /ListUsersForLock': 'LockController.ListUsersForLock',
 
  'post /api/login': 'AuthentificationController.login',
  'get /api/refresh': 'AuthentificationController.refresh',
 
-  '/DeleteLockForUser' : 'UserController.DeleteLockForUser',
+  'post /DeleteLockForUser' : 'UserController.DeleteLockForUser',
+
+  'post /AddLockForUser' : 'LockController.AddLockForUser',
  
   /*
   '/LockID':{
