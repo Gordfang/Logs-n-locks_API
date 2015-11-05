@@ -7,23 +7,38 @@
 
 module.exports = {
 	//// Changement Etat IsOpen
-	IdLock: function(req,res){
+	ChangeIsOpen: function(req,res){
 		var param = req.allParams();
-		console.log("param= "+param.id);
 		console.log("ID= "+param.id);
 		console.log("Isopen= "+param.isOpen);
 		Lock.findOne(param.id).exec(function (err, lock) {
 			if (err) return res.serverError(err);
 			if (!lock) { console.log("Error 1 : changement IsOpen"); }
 			else {
-				// do stuff
-				lock.isOpen = param.isOpen;
-				lock.save(function (err) {
-				if (err) return res.serverError(err);
-					// your change to the user was saved.
-					console.log("Success 1 : changement IsOpen");
-				});
-			}//return 
+				console.log(lock.isOpen);
+				if(param.isOpen == lock.isOpen){
+					if(param.isOpen != 0){
+						console.log("Fail 1 : Porte déjà ouverte!");
+						return res.json("La porte est déjà ouverte!");
+					}else{
+						console.log("Fail 2 : Porte déjà fermée!");
+						return res.json("La porte est déjà fermée!");
+					}
+				}else{
+					if(param.isOpen == 1){
+						lock.isOpen = true;
+					}
+					else{
+						lock.isOpen = false;
+					}
+					lock.save(function (err) {
+					if (err) return res.serverError(err);
+						// your change to the user was saved.
+						console.log("Success 1 : changement IsOpen");
+					});
+					return res.json("ok");
+				}
+			} 
 		})
 	},
 	

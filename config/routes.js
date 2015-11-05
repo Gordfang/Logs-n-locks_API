@@ -35,7 +35,7 @@ module.exports.routes = {
   '/': {
     view: 'homepage'
   },
-  'post /LockId': 'LockController.IdLock',
+  'post /ChangeIsOpen': 'LockController.ChangeIsOpen',
   'post /LockName': 'LockController.NameLock',
   'post /PasswdChange': 'UserController.ChangePass',
   'post /MailChange': 'UserController.ChangeMail',
