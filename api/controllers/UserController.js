@@ -38,7 +38,7 @@ module.exports = {
 			if (!user) { console.log("Error 1 : changement Password"); }
 			else {
 				// do stuff
-				User.find(param.email).exec(function (err, user)){
+				User.find(param.email).exec(function (err, user){
 					if (err) return res.serverError(err);
 					if (user) { console.log("Error 1 : changement Mail déja utilisé"); }
 					else {
@@ -49,7 +49,7 @@ module.exports = {
 							console.log("Success 1 : changement Mail");
 						});
 					}
-				}				
+				});				
 			}
 		})
 	},
