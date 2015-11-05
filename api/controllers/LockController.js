@@ -17,7 +17,7 @@ module.exports = {
 			else {
 				console.log(lock.isOpen);
 				if(param.isOpen == lock.isOpen){
-					if(param.isOpen != 0){
+					if(param.isOpen != false){
 						console.log("Fail 1 : Porte déjà ouverte!");
 						return res.json("La porte est déjà ouverte!");
 					}else{
