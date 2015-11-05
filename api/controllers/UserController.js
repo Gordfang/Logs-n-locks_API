@@ -27,6 +27,32 @@ module.exports = {
 		})
 		return res.json("ok")
 	},
+	
+	// Changement e-mail
+	ChangeMail: function(req,res){
+		var param = req.allParams();
+		console.log("id= "+param.id);
+		console.log("mail= "+param.email);
+		User.findOne(param.id).exec(function (err, user) {
+			if (err) return res.serverError(err);
+			if (!user) { console.log("Error 1 : changement Password"); }
+			else {
+				// do stuff
+				User.find(param.email).exec(function (err, user)){
+					if (err) return res.serverError(err);
+					if (user) { console.log("Error 1 : changement Mail déja utilisé"); }
+					else {
+						user.email = param.email;
+						user.save(function (err) {
+						if (err) return res.serverError(err);
+							// your change to the user was saved.
+							console.log("Success 1 : changement Mail");
+						});
+					}
+				}				
+			}
+		})
+	},
 
 	//
 
