@@ -56,17 +56,7 @@ module.exports = {
 			if (!lock) {console.log("Error 1 : List User for Lock"); }
 			else {
 				console.log("nb user : "+lock.users.length);
-				var list = [];
-				for(var i = 0; i <  lock.users.length; i++){
-					console.log("le id users is : "+lock.users[i].id);
-					User.findOne(lock.users[i].id).exec(function (err, user) {
-						console.log("lastname : "+user.lastname);
-						console.log("firstname : "+user.firstname);
-						var obj = {id: lock.users[i].id, name:user.lastname, ouverte: user.firstname};
-						list.push(obj);
-					});
-				}
-				return res.json(list);
+				return res.json(lock.users);
 			}//return
 		});
 	},

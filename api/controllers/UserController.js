@@ -37,18 +37,8 @@ module.exports = {
 			if (err) return res.serverError(err);
 			if (!user) { console.log("Error 1 : Affichage Locks"); }
 			else {
-				// do stuff
-				var list = [];
-				for(var i=0; i< user.locks.length; i++){
-					console.log("Id de la porte: "+user.locks[i].id);
-					Lock.findOne(user.locks[i].id).exec(function (err, lock) {
-						console.log("Nom de la porte: "+lock.nameLock);
-						console.log("Ouverte: "+lock.isOpen);
-						var obj = {name:lock.nameLock, ouverte: lock.isOpen};
-						list.push(obj);
-					});
-				}
-				return res.json(list);
+				// do stuff						
+				return res.json(user.locks);
 			}
 		})
 	},
