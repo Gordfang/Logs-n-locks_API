@@ -23,7 +23,7 @@ module.exports = {
 					// your change to the user was saved.
 					console.log("Success 1 : changement IsOpen");
 				});
-			}
+			}//return 
 		})
 	},
 	
@@ -45,6 +45,7 @@ module.exports = {
 				});
 			}
 		})
+		return res.json("ok");
 	},
 	
 	ListUsersForLock: function(req,res){
@@ -55,14 +56,18 @@ module.exports = {
 			if (!lock) {console.log("Error 1 : List User for Lock"); }
 			else {
 				console.log("nb user : "+lock.users.length);
+				var list = [];
 				for(var i = 0; i <  lock.users.length; i++){
 					console.log("le id users is : "+lock.users[i].id);
 					User.findOne(lock.users[i].id).exec(function (err, user) {
 						console.log("lastname : "+user.lastname);
 						console.log("firstname : "+user.firstname);
+						var obj = {id: lock.users[i].id, name:user.lastname, ouverte: user.firstname};
+						list.push(obj);
 					});
 				}
-			}
+				return res.json(list);
+			}//return
 		});
 	},
 
@@ -73,5 +78,6 @@ module.exports = {
 		Lock.create({nameLock: param.nameLock, isOpen: false, users: param.idUser}).exec(function createCB(err, created){
 			console.log("Success 1 : Création porte réussie");		
 		});
+		return res.json("ok");
 	}
 };

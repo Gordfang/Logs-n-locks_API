@@ -25,6 +25,7 @@ module.exports = {
 				});
 			}
 		})
+		return res.json("ok")
 	},
 
 	//
@@ -43,9 +44,9 @@ module.exports = {
 					Lock.findOne(user.locks[i].id).exec(function (err, lock) {
 						console.log("Nom de la porte: "+lock.nameLock);
 						console.log("Ouverte: "+lock.isOpen);
+						var obj = {id: user.locks[i].id, name:lock.nameLock, ouverte: lock.isOpen};
+						list.push(obj);
 					});
-					var obj = {id: user.locks[i].id, name:lock.nameLock, ouverte: lock.isOpen};
-					list.push(obj);
 				}
 				return res.json(list);
 			}
@@ -65,6 +66,7 @@ module.exports = {
 				user.save(console.log);
 			}
 		})
+		return res.json("ok");
 	},
 };
 
