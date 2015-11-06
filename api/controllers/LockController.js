@@ -83,5 +83,17 @@ module.exports = {
 			console.log("Success 1 : Création porte réussie");		
 		});
 		return res.json("ok");
+	},
+
+
+
+	GetLogsForLock: function(req,res){
+		if(!req.isSocket)return res.json(401,{err:'is not a socket request'});
+		var idLock = req.param('idLock');
+		Lock.find({id:idLock}).populate('logs').exec(function(err,lock){
+			if(err)return res.error()
+			Lock.subscribe(req, _.pluck(lock,'id'))
+			return res.json(lock)
+		})
 	}
 };
