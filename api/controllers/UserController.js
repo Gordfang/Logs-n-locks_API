@@ -10,9 +10,9 @@ module.exports = {
 	// Changement password
 	ChangePass: function(req,res){
 		var param = req.allParams();
-		console.log("id= "+param.id);
+		console.log("id= "+req.user.id);
 		console.log("pass= "+param.password);
-		User.findOne(param.id).exec(function (err, user) {
+		User.findOne(req.user.id).exec(function (err, user) {
 			if (err) return res.serverError(err);
 			if (!user) { console.log("Error 1 : changement Password"); }
 			else {
@@ -31,9 +31,9 @@ module.exports = {
 	// Changement e-mail
 	ChangeMail: function(req,res){
 		var param = req.allParams();
-		console.log("id= "+param.id);
+		console.log("id= "+req.user.id);
 		console.log("mail= "+param.email);
-		User.findOne(param.id).exec(function (err, user) {
+		User.findOne(req.user.id).exec(function (err, user) {
 			if (err) return res.serverError(err);
 			if (!user) { console.log("Error 1 : changement Password"); }
 			else {
@@ -58,8 +58,8 @@ module.exports = {
 
 	ListLocksForUser: function(req,res){
 		var param = req.allParams();
-		console.log("id user= "+param.id);
-		User.findOne(param.id).populate('locks').exec(function (err, user) {
+		console.log("id user= "+req.user.id);
+		User.findOne(req.user.id).populate('locks').exec(function (err, user) {
 			if (err) return res.serverError(err);
 			if (!user) { console.log("Error 1 : Affichage Locks"); }
 			else {
@@ -71,10 +71,10 @@ module.exports = {
 
 	DeleteLockForUser: function(req, res){
 		var param = req.allParams();
-		console.log("id user= "+param.idUser);
+		console.log("id user= "+req.user.id);
 		console.log("id lock= "+param.idLock);
 		console.log("token= "+param.authorization);
-		User.findOne({id: param.idUser}).populate('locks').exec(function (err, user) {
+		User.findOne({id: req.user.id}).populate('locks').exec(function (err, user) {
 		if (err) return res.serverError(err);
 			if (!user) { console.log("Error 1 : Affichage Locks"); }
 			else {				
