@@ -22,12 +22,7 @@ module.exports  ={
     },
     verify: function(token,callback){
         var config  = sails.config;
-        return jwt.verify(
-            token,
-            config.jwt.jwt_secret,
-            {},
-            callback
-        )
+        return jwt.verify(token, config.jwt.jwt_secret,{}, callback)
     },
     decode: function(token){
         return jwt.decode(token)
