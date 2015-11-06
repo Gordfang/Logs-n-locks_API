@@ -21,6 +21,10 @@ module.exports = {
 		collection: 'user',
 		via: 'locks'
 	}
+	logs:{
+		collection: 'log',
+		via: 'locks'
+	}
   }
 };
 
