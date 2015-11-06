@@ -21,7 +21,10 @@ module.exports = {
                 token = JwtHandler.generate({email:user.email,id: user.id});
                 user.token = token;
                 user.save(function(err){
-                    if(err) return res.json(403, {err:'forbidden'});
+                    if(err){
+                        console.log(err); 
+                        return res.json(403, {err:'forbidden'});
+                    } 
                     return res.json(
                         {
                             user: user,

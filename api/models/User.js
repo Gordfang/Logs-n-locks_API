@@ -12,7 +12,6 @@ module.exports = {
 	lastname:{
 		type: "string",
 		required: true,
-		minLength: 3
 	},
 	firstname:{
 		type: "string",

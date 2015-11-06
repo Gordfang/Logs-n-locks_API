@@ -77,9 +77,9 @@ module.exports = {
 
 	AddLockForUser: function(req, res){
 		var param = req.allParams();
-		console.log("id user = "+param.idUser);
+		console.log("id user = "+req.user.id);
 		console.log("nom de la porte = "+param.nameLock);
-		Lock.create({nameLock: param.nameLock, isOpen: false, users: param.idUser}).exec(function createCB(err, created){
+		Lock.create({nameLock: param.nameLock, isOpen: false, users: req.user.id}).exec(function createCB(err, created){
 			console.log("Success 1 : Création porte réussie");		
 		});
 		return res.json("ok");
