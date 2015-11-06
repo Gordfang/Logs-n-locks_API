@@ -25,12 +25,7 @@ module.exports = {
 						return res.json("La porte est déjà fermée!");
 					}
 				}else{
-					if(param.isOpen == 1){
-						lock.isOpen = true;
-					}
-					else{
-						lock.isOpen = false;
-					}
+					lock.isOpen = param.isOpen;
 					lock.save(function (err) {
 					if (err) return res.serverError(err);
 						// your change to the user was saved.
