@@ -20,10 +20,10 @@ module.exports = {
 	users:{
 		collection: 'user',
 		via: 'locks'
-	}
+	},
 	logs:{
 		collection: 'log',
-		via: 'locks'
+		via: 'lock'
 	}
   }
 };

@@ -18,7 +18,7 @@ module.exports = {
 				console.log(lock.isOpen);
 				if(param.isOpen == lock.isOpen){
 					if(param.isOpen != false){
-						console.log("Fail 1 : Porte déjà ouverte!");
+						console.log("Fail 1 : Porte déjà ouverte!");						
 						return res.json("La porte est déjà ouverte!");
 					}else{
 						console.log("Fail 2 : Porte déjà fermée!");
@@ -26,10 +26,14 @@ module.exports = {
 					}
 				}else{
 					lock.isOpen = param.isOpen;
+					lock.logs
 					lock.save(function (err) {
 					if (err) return res.serverError(err);
 						// your change to the user was saved.
 						console.log("Success 1 : changement IsOpen");
+						Log.create({ isOpen: param.isOpen, lock: param.id}).exec(function createCB(err, created){
+							console.log("Success 1 : Création log réussie");		
+						});
 					});
 					return res.json("ok");
 				}

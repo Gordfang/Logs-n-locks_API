@@ -12,10 +12,6 @@ module.exports = {
 		type: "boolean",
 		required: true
 	},
-	dateModif:{
-		type: "Date",
-		required: true
-	},
 	lock:{
 		model: 'lock'
 	}
