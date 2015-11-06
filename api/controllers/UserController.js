@@ -57,12 +57,14 @@ module.exports = {
 	//
 
 	ListLocksForUser: function(req,res){
+		if(!req.isSocket)return res.json(401,{err:'is not a socket request'});
 		var param = req.allParams();
 		console.log("id user= "+req.user.id);
 		User.findOne(req.user.id).populate('locks').exec(function (err, user) {
 			if (err) return res.serverError(err);
 			if (!user) { console.log("Error 1 : Affichage Locks"); }
 			else {
+				User.subscribe(req, _.pluck(user.locks,'id'));
 				// do stuff						
 				return res.json(user.locks);
 			}
