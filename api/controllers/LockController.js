@@ -35,6 +35,7 @@ module.exports = {
 							console.log("Success 1 : Création log réussie");		
 						});
 					});
+					lock.publishUpdate(updated[param.id].id, {updated[param.id].isOpen});
 					return res.json("ok");
 				}
 			} 
