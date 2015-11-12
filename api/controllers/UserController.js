@@ -86,5 +86,21 @@ module.exports = {
 		})
 		return res.json("ok");
 	},
+	
+	AddUserForLock: function(req, res){
+		var param = req.allParams();
+		console.log("id Lock = "+req.lockId);
+		console.log("mail du new user = "+param.email);
+		User.findOne(param.email).populate('locks').exec(function (err, user) {
+			if (err) return res.serverError(err);
+			if (!user) { console.log("Error : L'utilisateur demandé n'existe pas"); }
+			else {
+				user.locks.add(req.lockId);
+				user.save(console.log);					
+				return res.json('ok');
+			}
+			return res.json("Error : L'utilisateur demandé n'existe pas");
+		})
+	},
 };
 

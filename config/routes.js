@@ -49,6 +49,7 @@ module.exports.routes = {
   'post /DeleteLockForUser' : 'UserController.DeleteLockForUser',
 
   'post /AddLockForUser' : 'LockController.AddLockForUser',
+  'post /AddUserForLock' : 'UserController.AddUserForLock',
 
   'post /GetLogsForLock' : 'LockController.GetLogsForLock',
  
