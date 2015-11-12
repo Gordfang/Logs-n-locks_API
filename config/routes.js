@@ -37,6 +37,8 @@ module.exports.routes = {
   },
   'post /ChangeIsOpen': 'LockController.ChangeIsOpen',
   'post /ChangeNameLock': 'LockController.ChangeNameLock',
+  
+  'post /AddUser' : 'UserController.AddUser',
   'post /PasswdChange': 'UserController.ChangePass',
   'post /MailChange': 'UserController.ChangeMail',
 
@@ -50,7 +52,7 @@ module.exports.routes = {
 
   'post /AddLockForUser' : 'LockController.AddLockForUser',
   'post /AddUserForLock' : 'UserController.AddUserForLock',
-
+	
   'post /GetLogsForLock' : 'LockController.GetLogsForLock',
  
   /*

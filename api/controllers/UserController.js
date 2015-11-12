@@ -56,6 +56,14 @@ module.exports = {
 
 	//
 
+	AddUser: function(req, res){
+		var param = req.allParams();
+		User.create({lastname: param.lastname, firstname: param.lastname, email: param.eamil, password: param.password}).exec(function createCB(err, created){
+			console.log("Success 1 : Création User réussie");		
+		});
+		return res.json("ok");
+	},
+	
 	ListLocksForUser: function(req,res){
 		if(!req.isSocket)return res.json(401,{err:'is not a socket request'});
 		var param = req.allParams();
