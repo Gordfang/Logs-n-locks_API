@@ -25,17 +25,16 @@ module.exports = {
 						return res.json("La porte est déjà fermée!");
 					}
 				}else{
-					lock.isOpen = param.isOpen;
 					lock.logs
-					lock.save(function (err) {
-					if (err) return res.serverError(err);
+					Lock.update({id:param.id},{isOpen:param.isOpen}).exec(function update(err,updated){
 						// your change to the user was saved.
 						console.log("Success 1 : changement IsOpen");
 						Log.create({ isOpen: param.isOpen, lock: param.id}).exec(function createCB(err, created){
 							console.log("Success 1 : Création log réussie");		
 						});
+						console.log(updated);
+						Lock.publishUpdate(updated[0].id, {isOpen:updated[0].isOpen});
 					});
-					lock.publishUpdate(updated[param.id].id, {updated[param.id].isOpen});
 					return res.json("ok");
 				}
 			} 
