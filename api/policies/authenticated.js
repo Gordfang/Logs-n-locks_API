@@ -1,5 +1,11 @@
 module.exports = function authenticated(req, res, next) {
-    var token = req.headers.authorization || false;
+    if(req.isSocket){
+        var token = req.allParams().token || false;
+    }
+    else{
+        var token = req.headers.authorization || false;
+    }
+    console.log(token);
     if(!token){
         return res.json(401,{err: "user should be authenticated 1"} )
     }
