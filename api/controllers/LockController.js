@@ -33,8 +33,7 @@ module.exports = {
 							console.log("Success 1 : Création log réussie");		
 						});
 						console.log(updated);
-						Lock.publishUpdate(5, {isOpen:updated[0].isOpen});
-						sails.sockets.broadcast(updated[0].id, 'Change_isOpen', 'toto a bien changé isOpen')
+						Lock.publishUpdate(updated[0].id, {isOpen:updated[0].isOpen});
 					});
 					return res.json("ok");
 				}
