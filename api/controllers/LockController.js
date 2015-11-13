@@ -63,6 +63,20 @@ module.exports = {
 	},
 	
 	ListUsersForLock: function(req,res){
+		if(!req.isSocket)return res.json(401,{err:'is not a socket request'});
+		var param = req.allParams();
+		console.log("id lock= "+param.id);
+		Lock.findOne(param.id).populate('users').exec(function (err, lock) {
+			if (err) return res.serverError(err);
+			if (!user) { console.log("Error 1 : Affichage Users"); }
+			else {
+				Lock.subscribe(req, _.pluck(lock.users,'id'));
+				// do stuff						
+				return res.json(lock.users);
+			}
+		})
+	
+	/*
 		var param = req.allParams();
 		console.log("ID Lock= "+param.id);
 		Lock.findOne(param.id).populate('users').exec(function (err, lock) {
@@ -70,9 +84,13 @@ module.exports = {
 			if (!lock) {console.log("Error 1 : List User for Lock"); }
 			else {
 				console.log("nb user : "+lock.users.length);
+				console.log("user : "+lock.users.firstname);
+				
+				User.subscribe(req, _.pluck(lock.users,'id'));
+				// do stuff						
 				return res.json(lock.users);
 			}//return
-		});
+		}); */
 	},
 
 	AddLockForUser: function(req, res){
@@ -92,7 +110,7 @@ module.exports = {
 		var idLock = req.param('idLock');
 		Lock.find({id:idLock}).populate('logs').exec(function(err,lock){
 			if(err)return res.error()
-			Lock.subscribe(req, _.pluck(lock,'id'))
+			Lock.subscribe(req, _.pluck(user,'id'))
 			return res.json(lock)
 		})
 	}

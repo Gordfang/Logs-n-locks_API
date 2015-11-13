@@ -58,7 +58,8 @@ module.exports = {
 
 	AddUser: function(req, res){
 		var param = req.allParams();
-		User.create({lastname: param.lastname, firstname: param.lastname, email: param.eamil, password: param.password}).exec(function createCB(err, created){
+		User.create({lastname: param.lastname, firstname: param.lastname, email: param.eamil, password: User.beforeCreate(param.password)}).exec(function createCB(err, created){
+			if (err) return res.serverError(err);
 			console.log("Success 1 : Création User réussie");		
 		});
 		return res.json("ok");
