@@ -33,7 +33,8 @@ module.exports = {
 							console.log("Success 1 : Création log réussie");		
 						});
 						console.log(updated);
-						Lock.publishUpdate(updated[0].id, {isOpen:updated[0].isOpen});
+						Lock.publishUpdate(5, {isOpen:updated[0].isOpen});
+						sails.sockets.broadcast(updated[0].id, 'Change_isOpen', 'toto a bien changé isOpen')
 					});
 					return res.json("ok");
 				}
@@ -63,15 +64,16 @@ module.exports = {
 	},
 	
 	ListUsersForLock: function(req,res){
-		if(!req.isSocket)return res.json(401,{err:'is not a socket request'});
+		//if(!req.isSocket)return res.json(401,{err:'is not a socket request'});
 		var param = req.allParams();
 		console.log("id lock= "+param.id);
 		Lock.findOne(param.id).populate('users').exec(function (err, lock) {
 			if (err) return res.serverError(err);
-			if (!user) { console.log("Error 1 : Affichage Users"); }
+			if (!lock) { console.log("Error 1 : Affichage Users"); }
 			else {
-				Lock.subscribe(req, _.pluck(lock.users,'id'));
-				// do stuff						
+				//Lock.subscribe(req, _.pluck(lock.users,'id'));
+				// do stuff
+				console.log(lock.users);
 				return res.json(lock.users);
 			}
 		})
@@ -84,10 +86,14 @@ module.exports = {
 			if (!lock) {console.log("Error 1 : List User for Lock"); }
 			else {
 				console.log("nb user : "+lock.users.length);
+<<<<<<< HEAD
+				console.log(lock.users);
+=======
 				console.log("user : "+lock.users.firstname);
 				
 				User.subscribe(req, _.pluck(lock.users,'id'));
 				// do stuff						
+>>>>>>> modif test listUserforLock
 				return res.json(lock.users);
 			}//return
 		}); */

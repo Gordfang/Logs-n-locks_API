@@ -73,7 +73,10 @@ module.exports = {
 			if (err) return res.serverError(err);
 			if (!user) { console.log("Error 1 : Affichage Locks"); }
 			else {
-				User.subscribe(req, _.pluck(user.locks,'id'));
+				_.each(user.locks, function(lock){
+					Lock.subscribe(req.socket, lock.id);
+					sails.log('user' + req.user.id + 'has subscribe');
+				});
 				// do stuff						
 				return res.json(user.locks);
 			}
@@ -98,13 +101,31 @@ module.exports = {
 	
 	AddUserForLock: function(req, res){
 		var param = req.allParams();
-		console.log("id Lock = "+req.lockId);
+		console.log("id Lock = "+param.idLock);
 		console.log("mail du new user = "+param.email);
-		User.findOne(param.email).populate('locks').exec(function (err, user) {
+		User.findOne({email : param.email}).populate('locks').exec(function (err, user) {
 			if (err) return res.serverError(err);
 			if (!user) { console.log("Error : L'utilisateur demandé n'existe pas"); }
 			else {
-				user.locks.add(req.lockId);
+				console.log('création de la liaison lock-user');
+				user.locks.add(param.idLock);
+				user.save(console.log);					
+				return res.json('ok');
+			}
+			return res.json("Error : L'utilisateur demandé n'existe pas");
+		})
+	},
+	
+	DeleteUserForLock: function(req, res){
+		var param = req.allParams();
+		console.log("id Lock = "+param.idLock);
+		console.log("id autre user = "+param.idUser);
+		User.findOne(param.idUser).populate('locks').exec(function (err, user) {
+			if (err) return res.serverError(err);
+			if (!user) { console.log("Error : L'utilisateur demandé n'existe pas"); }
+			else {
+				console.log('destruction de la liaison lock-user');
+				user.locks.delete(param.idLock);
 				user.save(console.log);					
 				return res.json('ok');
 			}
