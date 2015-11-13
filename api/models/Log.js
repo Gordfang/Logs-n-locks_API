@@ -14,6 +14,9 @@ module.exports = {
 	},
 	lock:{
 		model: 'lock'
+	},
+	user:{
+		model: 'user'
 	}
   }
 };

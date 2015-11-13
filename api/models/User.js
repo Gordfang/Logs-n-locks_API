@@ -36,6 +36,10 @@ module.exports = {
 	refreshToken:{
 		type: 'text'
 	},
+	logs:{
+		collection: 'log',
+		via: 'lock'
+	},
 	toJson: function(){
 		var obj = this.toObject();
 		delete obj.password;
