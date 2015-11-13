@@ -72,7 +72,10 @@ module.exports = {
 			if (err) return res.serverError(err);
 			if (!user) { console.log("Error 1 : Affichage Locks"); }
 			else {
-				User.subscribe(req, _.pluck(user.locks,'id'));
+				_.each(user.locks, function(lock){
+					Lock.subscribe(req.socket, lock.id);
+					sails.log('user' + req.user.id + 'has subscribe');
+				});
 				// do stuff						
 				return res.json(user.locks);
 			}

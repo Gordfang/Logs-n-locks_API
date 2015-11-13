@@ -33,7 +33,8 @@ module.exports = {
 							console.log("Success 1 : Création log réussie");		
 						});
 						console.log(updated);
-						Lock.publishUpdate(updated[0].id, {isOpen:updated[0].isOpen});
+						Lock.publishUpdate(5, {isOpen:updated[0].isOpen});
+						sails.sockets.broadcast(updated[0].id, 'Change_isOpen', 'toto a bien changé isOpen')
 					});
 					return res.json("ok");
 				}
@@ -70,6 +71,7 @@ module.exports = {
 			if (!lock) {console.log("Error 1 : List User for Lock"); }
 			else {
 				console.log("nb user : "+lock.users.length);
+				console.log(lock.users);
 				return res.json(lock.users);
 			}//return
 		});
