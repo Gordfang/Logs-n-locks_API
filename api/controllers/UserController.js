@@ -128,15 +128,15 @@ module.exports = {
 			if (err) return res.serverError(err);
 			if (!user) { console.log("Error : L'utilisateur demandé n'existe pas"); }
 			else {
-<<<<<<< HEAD
+
 				user.locks.add(req.lockId);
 				user.save(console.log);		
 				//Lock.publishCreate(14, {lock:created[0]});			
-=======
+
 				console.log('destruction de la liaison lock-user');
 				user.locks.delete(param.idLock);
 				user.save(console.log);					
->>>>>>> origin/master
+
 				return res.json('ok');
 			}
 			return res.json("Error : L'utilisateur demandé n'existe pas");
