@@ -17,6 +17,9 @@ module.exports = {
 		type: "boolean",
 		required: true
 	},
+	isAdmin:{
+		model: 'user'
+	},
 	users:{
 		collection: 'user',
 		via: 'locks'

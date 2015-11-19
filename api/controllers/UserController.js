@@ -60,16 +60,19 @@ module.exports = {
 		console.log("AddUser : ");
 		var param = req.allParams();
 		User.findOne({email: param.email}).exec(function (err, user) {
+			console.log("1");
 			if(!user)
 			{
+				console.log("2");
 				User.create({lastname: param.lastname, firstname: param.firstname, email: param.email, password: param.password}).exec(function createCB(err, created){
 					if (err) return res.serverError(err);
 					console.log("Success 1 : Création User réussie");		
 				});
 				return res.json("ok");
 			}
-		});
-		return res.json("email deja pris");
+			else
+				return res.json("email deja pris");
+		});		
 	},
 	
 	ListLocksForUser: function(req,res){
@@ -140,6 +143,14 @@ module.exports = {
 				console.log('destruction de la liaison lock-user');
 				user.locks.delete(param.idLock);
 				user.save(console.log);					
+				user.locks.add(req.lockId);
+				user.save(console.log);		
+				//Lock.publishCreate(14, {lock:created[0]});			
+
+				console.log('destruction de la liaison lock-user');
+				user.locks.delete(param.idLock);
+				user.save(console.log);					
+
 				return res.json('ok');
 			}
 			return res.json("Error : L'utilisateur demandé n'existe pas");

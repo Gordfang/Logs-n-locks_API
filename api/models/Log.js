@@ -8,8 +8,8 @@
 module.exports = {
 
   attributes: {
-	isOpen:{
-		type: "boolean",
+	message:{
+		type: "string",
 		required: true
 	},
 	lock:{

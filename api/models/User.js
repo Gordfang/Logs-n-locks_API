@@ -36,6 +36,10 @@ module.exports = {
 	refreshToken:{
 		type: 'text'
 	},
+	lockAdmin:{
+		collection: 'lock',
+		via: 'isAdmin'
+	},
 	logs:{
 		collection: 'log',
 		via: 'lock'
