@@ -29,9 +29,17 @@ module.exports = {
 					Lock.update({id:param.id},{isOpen:param.isOpen}).exec(function update(err,updated){
 						// your change to the user was saved.
 						console.log("Success 1 : changement IsOpen");
-						Log.create({ isOpen: param.isOpen, lock: param.id}).exec(function createCB(err, created){
-							console.log("Success 1 : Création log réussie");		
-						});
+						if(param.isOpen){
+							Log.create({ message: "Changement de l'état de la porte en ouverte ", lock: param.id, user: req.user.id}).exec(function createCB(err, created){
+								console.log("Success 1 : Création log réussie");		
+							});
+						}
+						else{
+							Log.create({ message: "Changement de l'état de la porte en fermée", lock: param.id, user: req.user.id}).exec(function createCB(err, created){
+								console.log("Success 1 : Création log réussie");		
+							});
+						}
+						
 						console.log(updated);
 						Lock.publishUpdate(updated[0].id, {lock:updated[0]});
 					});
@@ -55,9 +63,9 @@ module.exports = {
 				Lock.update({id:param.id},{nameLock:param.nameLock}).exec(function update(err,updated){
 						// your change to the user was saved.
 						console.log("Success 1 : changement NameLock");
-						/*Log.create({ name: param.nameLock, lock: param.id}).exec(function createCB(err, created){
+						Log.create({ message: "Changement du nom de la porte en "+param.nameLock, lock: param.id, user: req.user.id}).exec(function createCB(err, created){
 							console.log("Success 1 : Création log réussie");		
-						});*/
+						});
 						console.log(updated);
 						Lock.publishUpdate(updated[0].id, {lock:updated[0]});
 				});
