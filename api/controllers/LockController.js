@@ -33,7 +33,7 @@ module.exports = {
 							console.log("Success 1 : Création log réussie");		
 						});
 						console.log(updated);
-						Lock.publishUpdate(updated[0].id, {isOpen:updated[0].isOpen});
+						Lock.publishUpdate(updated[0].id, {lock:updated[0]});
 					});
 					return res.json("ok");
 				}
@@ -52,10 +52,14 @@ module.exports = {
 			else {
 				// do stuff
 				lock.nameLock = param.nameLock;
-				lock.save(function (err) {
-				if (err) return res.serverError(err);
-					// your change to the user was saved.
-					console.log("Success 1 : changement nameLock");
+				Lock.update({id:param.id},{nameLock:param.nameLock}).exec(function update(err,updated){
+						// your change to the user was saved.
+						console.log("Success 1 : changement NameLock");
+						/*Log.create({ name: param.nameLock, lock: param.id}).exec(function createCB(err, created){
+							console.log("Success 1 : Création log réussie");		
+						});*/
+						console.log(updated);
+						Lock.publishUpdate(updated[0].id, {lock:updated[0]});
 				});
 			}
 		})
@@ -77,13 +81,23 @@ module.exports = {
 	},
 
 	AddLockForUser: function(req, res){
+		if(!req.isSocket)return res.json(401,{err:'is not a socket request'});
 		var param = req.allParams();
 		console.log("id user = "+req.user.id);
 		console.log("nom de la porte = "+param.nameLock);
 		Lock.create({nameLock: param.nameLock, isOpen: false, users: req.user.id}).exec(function createCB(err, created){
 			console.log("Success 1 : Création porte réussie");		
+			/*Log.create({ name: param.nameLock, lock: param.id}).exec(function createCB(err, created){
+				console.log("Success 1 : Création log réussie");		
+			});*/
+			console.log(created);
+			Lock.subscribe(req.socket, created.id);
+	///////////////////////////////////////////////////* à revoir le publishAdd*/
+			User.publishAdd(req.user.id, "locks", created.id);
+			sails.log('user' + req.user.id + 'has subscribe');
+			return res.json(created);
 		});
-		return res.json("ok");
+
 	},
 
 

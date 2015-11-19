@@ -83,15 +83,18 @@ module.exports = {
 	},
 
 	DeleteLockForUser: function(req, res){
+		if(!req.isSocket)return res.json(401,{err:'is not a socket request'});
 		var param = req.allParams();
 		console.log("id user= "+req.user.id);
 		console.log("id lock= "+param.idLock);
-		console.log("token= "+param.authorization);
 		User.findOne({id: req.user.id}).populate('locks').exec(function (err, user) {
 		if (err) return res.serverError(err);
 			if (!user) { console.log("Error 1 : Affichage Locks"); }
 			else {				
 				user.locks.remove(param.idLock);
+				User.publishRemove(req.user.id, "locks", param.idLock);
+				Lock.unsubscribe(req.socket, param.idLock);
+				sails.log('user' + req.user.id + 'has unsubscribe');
 				user.save(console.log);
 			}
 		})
@@ -107,7 +110,8 @@ module.exports = {
 			if (!user) { console.log("Error : L'utilisateur demandé n'existe pas"); }
 			else {
 				user.locks.add(req.lockId);
-				user.save(console.log);					
+				user.save(console.log);		
+				//Lock.publishCreate(14, {lock:created[0]});			
 				return res.json('ok');
 			}
 			return res.json("Error : L'utilisateur demandé n'existe pas");
