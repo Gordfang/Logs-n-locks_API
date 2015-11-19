@@ -38,7 +38,7 @@ module.exports = {
 	},
 	lockAdmin:{
 		collection: 'lock',
-		via: 'isAdmin'
+		via: 'idAdmin'
 	},
 	logs:{
 		collection: 'log',
@@ -65,6 +65,7 @@ module.exports = {
   		})
   	})
   },
+
   comparePassword: function(password,user,cb){
   	bcrypt.compare(password,user.password, function(err,match){
   		if(err) cb(err)

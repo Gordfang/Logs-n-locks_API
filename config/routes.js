@@ -39,8 +39,10 @@ module.exports.routes = {
   'post /ChangeNameLock': 'LockController.ChangeNameLock',
   
   'post /AddUser' : 'UserController.AddUser',
-  'post /PasswdChange': 'UserController.ChangePass',
-  'post /MailChange': 'UserController.ChangeMail',
+  'post /DeleteUser' : 'UserController.DeleteUser',
+  
+  'post /ChangePass': 'UserController.ChangePass',
+  'post /ChangeMail': 'UserController.ChangeMail',
 
   'post /ListLocksForUser': 'UserController.ListLocksForUser',
   'post /ListUsersForLock': 'LockController.ListUsersForLock',

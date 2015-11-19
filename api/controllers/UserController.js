@@ -17,15 +17,29 @@ module.exports = {
 			if (!user) { console.log("Error 1 : changement Password"); }
 			else {
 				// do stuff
-				user.password = param.password;
-				user.save(function (err) {
-				if (err) return res.serverError(err);
-					// your change to the user was saved.
-					console.log("Success 1 : changement Password");
-				});
+				bcrypt.genSalt(10, function(err, salt){
+					if(err){						
+						console.log('pass err 1 :'+ err);
+						return res.json(err);
+					}
+					bcrypt.hash(param.password, salt,function(err,hash){
+						if(err)
+						{							
+							console.log('pass err 2 :'+ err);
+							return res.json(err);
+						}
+						user.password = hash;
+						console.log('pass Contro :'+user.password);
+						user.save(function (err) {
+						if (err) return res.serverError(err);
+							// your change to the user was saved.
+							console.log("Success 1 : changement Password");
+						});
+					});
+				});				
 			}
-		})
-		return res.json("ok")
+		});
+		return res.json("ok");
 	},
 	
 	// Changement e-mail
@@ -74,6 +88,26 @@ module.exports = {
 				return res.json("email deja pris");
 		});		
 	},
+	
+	DeleteUser: function(req, res){
+		console.log("DeleteUser : ");
+		var param = req.allParams();
+		console.log('pass1 : '+ param.password);
+		User.findOne({id:req.user.id}, function(err,user){
+			if(err){
+				return res.json('erreur mot de passe');
+				console.log("Error");
+			}
+			User.comparePassword(param.password,user, function(err,valid){
+				user.destroy(function (err) {
+                    if (err) { return done(err); }
+					console.log("Success");	
+					return res.json('Le compte à bien été suprimé');
+				});
+			});
+		});
+	},
+	
 	
 	ListLocksForUser: function(req,res){
 		if(!req.isSocket)return res.json(401,{err:'is not a socket request'});

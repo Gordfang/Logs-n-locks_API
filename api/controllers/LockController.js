@@ -92,7 +92,7 @@ module.exports = {
 		var param = req.allParams();
 		console.log("id user = "+req.user.id);
 		console.log("nom de la porte = "+param.nameLock);
-		Lock.create({nameLock: param.nameLock, isOpen: false, users: req.user.id, isAdmin: req.user.id}).exec(function createCB(err, created){
+		Lock.create({nameLock: param.nameLock, isOpen: false, users: req.user.id, idAdmin: req.user.id}).exec(function createCB(err, created){
 			console.log("Success 1 : Création porte réussie");		
 			/*Log.create({ name: param.nameLock, lock: param.id}).exec(function createCB(err, created){
 				console.log("Success 1 : Création log réussie");		

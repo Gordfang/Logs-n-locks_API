@@ -17,7 +17,7 @@ module.exports = {
 		type: "boolean",
 		required: true
 	},
-	isAdmin:{
+	idAdmin:{
 		model: 'user'
 	},
 	users:{
