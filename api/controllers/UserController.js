@@ -59,11 +59,17 @@ module.exports = {
 	AddUser: function(req, res){
 		console.log("AddUser : ");
 		var param = req.allParams();
-		User.create({lastname: param.lastname, firstname: param.firstname, email: param.email, password: param.password}).exec(function createCB(err, created){
-			if (err) return res.serverError(err);
-			console.log("Success 1 : Création User réussie");		
+		User.findOne({email: param.email}).exec(function (err, user) {
+			if(!user)
+			{
+				User.create({lastname: param.lastname, firstname: param.firstname, email: param.email, password: param.password}).exec(function createCB(err, created){
+					if (err) return res.serverError(err);
+					console.log("Success 1 : Création User réussie");		
+				});
+				return res.json("ok");
+			}
 		});
-		return res.json("ok");
+		return res.json("email deja pris");
 	},
 	
 	ListLocksForUser: function(req,res){
@@ -128,15 +134,12 @@ module.exports = {
 			if (err) return res.serverError(err);
 			if (!user) { console.log("Error : L'utilisateur demandé n'existe pas"); }
 			else {
-<<<<<<< HEAD
 				user.locks.add(req.lockId);
 				user.save(console.log);		
 				//Lock.publishCreate(14, {lock:created[0]});			
-=======
 				console.log('destruction de la liaison lock-user');
 				user.locks.delete(param.idLock);
 				user.save(console.log);					
->>>>>>> origin/master
 				return res.json('ok');
 			}
 			return res.json("Error : L'utilisateur demandé n'existe pas");
