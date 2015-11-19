@@ -68,7 +68,7 @@ module.exports = {
 					if (err) return res.serverError(err);
 					console.log("Success 1 : Création User réussie");		
 				});
-				return res.json("ok");
+				return res.json("Utilisateur créé");
 			}
 			else
 				return res.json("email deja pris");

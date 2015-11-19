@@ -76,7 +76,7 @@ module.exports = {
 	
 	ListUsersForLock: function(req,res){
 		var param = req.allParams();
-		console.log("id lock= "+param.id);
+		console.log("id lock list= "+param.id);
 		Lock.findOne(param.id).populate('users').exec(function (err, lock) {
 			if (err) return res.serverError(err);
 			if (!lock) { console.log("Error 1 : Affichage Users"); }
@@ -92,7 +92,7 @@ module.exports = {
 		var param = req.allParams();
 		console.log("id user = "+req.user.id);
 		console.log("nom de la porte = "+param.nameLock);
-		Lock.create({nameLock: param.nameLock, isOpen: false, users: req.user.id}).exec(function createCB(err, created){
+		Lock.create({nameLock: param.nameLock, isOpen: false, users: req.user.id, isAdmin: req.user.id}).exec(function createCB(err, created){
 			console.log("Success 1 : Création porte réussie");		
 			/*Log.create({ name: param.nameLock, lock: param.id}).exec(function createCB(err, created){
 				console.log("Success 1 : Création log réussie");		
@@ -102,7 +102,7 @@ module.exports = {
 	///////////////////////////////////////////////////* à revoir le publishAdd*/
 			User.publishAdd(req.user.id, "locks", created.id);
 			sails.log('user' + req.user.id + 'has subscribe');
-			return res.json(created);
+			return res.json('created');
 		});
 
 	},
