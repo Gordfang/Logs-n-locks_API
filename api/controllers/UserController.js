@@ -107,7 +107,7 @@ module.exports = {
 				Lock.unsubscribe(req.socket, param.idLock);
 				sails.log('user' + req.user.id + 'has unsubscribe');
 				user.save(console.log);
-				Log.create({ message: "Supression de l'utilisateur "+req.user.lastname+" "+req.user.firstname+" pour la porte "+param.idLock, lock: param.id, user: req.user.id}).exec(function createCB(err, created){
+				Log.create({ message: "Supression de l'utilisateur "+req.user.lastname+" "+req.user.firstname+" pour la porte "+param.idLock, lock: param.idLock, user: req.user.id}).exec(function createCB(err, created){
 					console.log("Success 1 : Création log réussie");		
 				});
 			}
@@ -126,10 +126,12 @@ module.exports = {
 				console.log('création de la liaison lock-user');
 				user.locks.add(param.idLock);
 				user.save(console.log);
+				User.publishAdd(user.id, "locks", param.idLock);
 				Log.create({ message: "Ajout de l'utilisateur "+user.lastname+" "+user.firstname+" à la porte "+param.idLock+" par l'utilisateur "+req.user.lastname+" "+req.user.firstname,
 					lock: param.idLock, user: user.id}).exec(function createCB(err, created){
 						console.log("Success 1 : Création log réussie");		
-				});					
+				});		
+
 				return res.json('ok');
 			}
 			return res.json("Error : L'utilisateur demandé n'existe pas");
