@@ -57,8 +57,10 @@ module.exports = {
 	//
 
 	AddUser: function(req, res){
+		console.log("AddUser : ");
 		var param = req.allParams();
-		User.create({lastname: param.lastname, firstname: param.lastname, email: param.eamil, password: param.password}).exec(function createCB(err, created){
+		User.create({lastname: param.lastname, firstname: param.firstname, email: param.email, password: param.password}).exec(function createCB(err, created){
+			if (err) return res.serverError(err);
 			console.log("Success 1 : Création User réussie");		
 		});
 		return res.json("ok");
@@ -103,15 +105,38 @@ module.exports = {
 	
 	AddUserForLock: function(req, res){
 		var param = req.allParams();
-		console.log("id Lock = "+req.lockId);
+		console.log("id Lock = "+param.idLock);
 		console.log("mail du new user = "+param.email);
-		User.findOne(param.email).populate('locks').exec(function (err, user) {
+		User.findOne({email : param.email}).populate('locks').exec(function (err, user) {
 			if (err) return res.serverError(err);
 			if (!user) { console.log("Error : L'utilisateur demandé n'existe pas"); }
 			else {
+				console.log('création de la liaison lock-user');
+				user.locks.add(param.idLock);
+				user.save(console.log);					
+				return res.json('ok');
+			}
+			return res.json("Error : L'utilisateur demandé n'existe pas");
+		})
+	},
+	
+	DeleteUserForLock: function(req, res){
+		var param = req.allParams();
+		console.log("id Lock = "+param.idLock);
+		console.log("id autre user = "+param.idUser);
+		User.findOne(param.idUser).populate('locks').exec(function (err, user) {
+			if (err) return res.serverError(err);
+			if (!user) { console.log("Error : L'utilisateur demandé n'existe pas"); }
+			else {
+<<<<<<< HEAD
 				user.locks.add(req.lockId);
 				user.save(console.log);		
 				//Lock.publishCreate(14, {lock:created[0]});			
+=======
+				console.log('destruction de la liaison lock-user');
+				user.locks.delete(param.idLock);
+				user.save(console.log);					
+>>>>>>> origin/master
 				return res.json('ok');
 			}
 			return res.json("Error : L'utilisateur demandé n'existe pas");

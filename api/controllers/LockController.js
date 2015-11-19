@@ -68,16 +68,15 @@ module.exports = {
 	
 	ListUsersForLock: function(req,res){
 		var param = req.allParams();
-		console.log("ID Lock= "+param.id);
+		console.log("id lock= "+param.id);
 		Lock.findOne(param.id).populate('users').exec(function (err, lock) {
 			if (err) return res.serverError(err);
-			if (!lock) {console.log("Error 1 : List User for Lock"); }
+			if (!lock) { console.log("Error 1 : Affichage Users"); }
 			else {
-				console.log("nb user : "+lock.users.length);
 				console.log(lock.users);
 				return res.json(lock.users);
-			}//return
-		});
+			}
+		})
 	},
 
 	AddLockForUser: function(req, res){
@@ -107,7 +106,7 @@ module.exports = {
 		var idLock = req.param('idLock');
 		Lock.find({id:idLock}).populate('logs').exec(function(err,lock){
 			if(err)return res.error()
-			Lock.subscribe(req, _.pluck(lock,'id'))
+			Lock.subscribe(req, _.pluck(user,'id'))
 			return res.json(lock)
 		})
 	}
