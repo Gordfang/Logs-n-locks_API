@@ -21,8 +21,11 @@ module.exports.policies = {
 
 '*': 'authenticated',
     AuthentificationController : {
-      'login' : []
-    }
+      'login' : [],
+    },
+	UserController :{
+		'AddUser' : [],
+	},
 
   /***************************************************************************
   *                                                                          *
