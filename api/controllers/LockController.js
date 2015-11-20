@@ -31,12 +31,12 @@ module.exports = {
 						// your change to the user was saved.
 						console.log("Success 1 : changement IsOpen");
 						if(param.isOpen){
-							Log.create({ message: "Ouverture du verrou"+updated.nameLock+" par l'utilisateur "+req.user.firstname+" "+req.user.lastname, lock: param.id, user: req.user.id}).exec(function createCB(err, created){
+							Log.create({ message: "Ouverture du verrou "+updated[0].nameLock+" par l'utilisateur "+req.user.firstname+" "+req.user.lastname, lock: param.id, user: req.user.id}).exec(function createCB(err, created){
 								console.log("Success 1 : Création log réussie");		
 							});
 						}
 						else{
-							Log.create({ message: "Fermeture du verrou"+updated.nameLock+" par l'utilisateur "+req.user.firstname+" "+req.user.lastname, lock: param.id, user: req.user.id}).exec(function createCB(err, created){
+							Log.create({ message: "Fermeture du verrou "+updated[0].nameLock+" par l'utilisateur "+req.user.firstname+" "+req.user.lastname, lock: param.id, user: req.user.id}).exec(function createCB(err, created){
 								console.log("Success 1 : Création log réussie");		
 							});
 						}
