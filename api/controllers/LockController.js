@@ -99,23 +99,25 @@ module.exports = {
 			});*/
 			console.log(created);
 			Lock.subscribe(req.socket, created.id);
-	///////////////////////////////////////////////////* à revoir le publishAdd*/
 			User.publishAdd(req.user.id, "locks", created.id);
 			sails.log('user' + req.user.id + 'has subscribe');
-			return res.json('created');
+			return res.json(created);
 		});
 
 	},
 
 
 
-	GetLogsForLock: function(req,res){
-		if(!req.isSocket)return res.json(401,{err:'is not a socket request'});
-		var idLock = req.param('idLock');
-		Lock.find({id:idLock}).populate('logs').exec(function(err,lock){
-			if(err)return res.error()
-			Lock.subscribe(req, _.pluck(user,'id'))
-			return res.json(lock)
+	ShowLogsForLock: function(req,res){
+		var param = req.allParams();
+		var listLog = [];
+		console.log("id lock: "+param.idLock);
+		Log.find({lock: param.idLock}).sort({id:'desc'}).exec(function (err,logs){
+			for(var i=0; i<10; i++){
+				listLog[i] = logs[i];
+			}
+			console.log(listLog);
+			return res.json(listLog);
 		})
 	}
 };
