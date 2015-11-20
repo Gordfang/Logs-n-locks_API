@@ -6,6 +6,7 @@
  */
 var bcrypt = require('bcryptjs');
 
+//////fonction pour supprimer des portes ou des liens entre un user et une porte
 	function DestroyLinksUserLocks(reqSocket, listLock, idUser){
 		console.log("tableau : "+listLock);
 		console.log("id user= "+idUser);
@@ -24,6 +25,9 @@ var bcrypt = require('bcryptjs');
 							sails.log('user' + useR.id + 'has unsubscribe');
 							useR.save(console.log);
 						});
+						Log.create({ message: "Supression du verrou "+locK.nameLock+" par l'administrateur "+useR.firstname+" "+useR.lastname, lock: locK.id, user: useR.id}).exec(function createCB(err, created){
+							console.log("Success 1 : Création log réussie");		
+						});
 						Lock.destroy({id: locK.id}).exec(function (err, destroyed){
 							console.log("destroyed");
 							console.log(destroyed);
@@ -35,10 +39,11 @@ var bcrypt = require('bcryptjs');
 						Lock.unsubscribe(reqSocket, locK.id);
 						sails.log('user' + useR.id + 'has unsubscribe');
 						useR.save(console.log);
+						Log.create({ message: "Supression de l'utilisateur "+useR.firstname+" "+useR.lastname+" sur le verrou "+locK.nameLock, lock: locK.id, user: useR.id}).exec(function createCB(err, created){
+							console.log("Success 1 : Création log réussie");		
+						});
 					}
-					Log.create({ message: "Supression de la porte "+locK.id+" pour l'utilisateur "+useR.lastname+" "+useR.firstname, lock: locK.id, user: useR.id}).exec(function createCB(err, created){
-						console.log("Success 1 : Création log réussie");		
-					});
+					
 				});
 			})
 		});
@@ -46,7 +51,7 @@ var bcrypt = require('bcryptjs');
 
 module.exports = {
 
-	// Changement password
+	// Changement du password de l'utilisateur
 	ChangePass: function(req,res){
 		var param = req.allParams();
 		console.log("id= "+req.user.id);
@@ -81,7 +86,7 @@ module.exports = {
 		return res.json("ok");
 	},
 	
-	// Changement e-mail
+	// Changement de l'e-mail d'un utilisateur
 	ChangeMail: function(req,res){
 		var param = req.allParams();
 		console.log("id= "+req.user.id);
@@ -107,8 +112,8 @@ module.exports = {
 		})
 	},
 
-	//
 
+	//// création d'un compte utilisateur
 	AddUser: function(req, res){
 		console.log("AddUser : ");
 		var param = req.allParams();
@@ -153,7 +158,7 @@ module.exports = {
 		});
 	},*/
 	
-	
+	//// ajout de la liste des locks pour un utilisateur
 	ListLocksForUser: function(req,res){
 		if(!req.isSocket)return res.json(401,{err:'is not a socket request'});
 		var param = req.allParams();
@@ -174,7 +179,7 @@ module.exports = {
 
 
 	
-
+	///////////// Supression d'une porte pour un utilisateur
 	DeleteLockForUser: function(req, res){
 		if(!req.isSocket) return res.json(401,{err:'is not a socket request'});
 		var param = req.allParams();
@@ -201,7 +206,7 @@ module.exports = {
 	
 
 	  
-	
+	////Ajout d'un utilisateur pour une porte
 	AddUserForLock: function(req, res){
 		var param = req.allParams();
 		console.log("id Lock = "+param.idLock);
@@ -214,10 +219,13 @@ module.exports = {
 				user.locks.add(param.idLock);
 				user.save(console.log);
 				User.publishAdd(user.id, "locks", param.idLock);
-				Log.create({ message: "Ajout de l'utilisateur "+user.lastname+" "+user.firstname+" à la porte "+param.idLock+" par l'utilisateur "+req.user.lastname+" "+req.user.firstname,
-					lock: param.idLock, user: user.id}).exec(function createCB(err, created){
-						console.log("Success 1 : Création log réussie");		
-				});		
+				Lock.findOne({id : param.idLock}).exec(function (err, lock){
+					Log.create({ message: "Ajout de l'utilisateur "+user.firstname+" "+user.lastname+" au verrou "+lock.nameLock+" par l'utilisateur "+req.user.lastname+" "+req.user.firstname,
+						lock: param.idLock, user: user.id}).exec(function createCB(err, created){
+							console.log("Success 1 : Création log réussie");		
+					});
+				})
+						
 
 				return res.json('ok');
 			}
@@ -225,6 +233,7 @@ module.exports = {
 		})
 	},
 	
+	////Supression d'un utilisateur pour une porte
 	DeleteUserForLock: function(req, res){
 		var param = req.allParams();
 		console.log("id Lock = "+param.idLock);
@@ -246,7 +255,7 @@ module.exports = {
 				console.log('destruction de la liaison lock-user');
 				user.locks.delete(param.idLock);
 				user.save(console.log);	
-				Log.create({ message: "Supression de l'utilisateur "+req.user.lastname+" "+req.user.firstname+" à la porte "+param.idLock, lock: param.id, user: req.user.id}).exec(function createCB(err, created){
+				Log.create({ message: "Supression de l'utilisateur "+req.user.lastname+" "+req.user.firstname+" au verrou "+param.idLock, lock: param.id, user: req.user.id}).exec(function createCB(err, created){
 					console.log("Success 1 : Création log réussie");		
 				});					
 

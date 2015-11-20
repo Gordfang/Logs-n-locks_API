@@ -7,7 +7,7 @@
 var moment = require('moment');
  
 module.exports = {
-	//// Changement Etat IsOpen
+	//// Changement de l'état de la porte
 	ChangeIsOpen: function(req,res){
 		var param = req.allParams();
 		console.log("ID= "+param.id);
@@ -31,12 +31,12 @@ module.exports = {
 						// your change to the user was saved.
 						console.log("Success 1 : changement IsOpen");
 						if(param.isOpen){
-							Log.create({ message: "Changement de l'état de la porte en ouverte ", lock: param.id, user: req.user.id}).exec(function createCB(err, created){
+							Log.create({ message: "Ouverture du verrou"+updated.nameLock+" par l'utilisateur "+req.user.firstname+" "+req.user.lastname, lock: param.id, user: req.user.id}).exec(function createCB(err, created){
 								console.log("Success 1 : Création log réussie");		
 							});
 						}
 						else{
-							Log.create({ message: "Changement de l'état de la porte en fermée", lock: param.id, user: req.user.id}).exec(function createCB(err, created){
+							Log.create({ message: "Fermeture du verrou"+updated.nameLock+" par l'utilisateur "+req.user.firstname+" "+req.user.lastname, lock: param.id, user: req.user.id}).exec(function createCB(err, created){
 								console.log("Success 1 : Création log réussie");		
 							});
 						}
@@ -50,7 +50,7 @@ module.exports = {
 		})
 	},
 	
-	//// Changement Nom Lock
+	//// Changement du nom de la porte
 	ChangeNameLock: function(req,res){
 		var param = req.allParams();
 		console.log("ID= "+param.id);
@@ -60,11 +60,11 @@ module.exports = {
 			if (!lock) { console.log("Error 1 : changement nameLock"); }
 			else {
 				// do stuff
-				lock.nameLock = param.nameLock;
+				var ancienName = lock.nameLock
 				Lock.update({id:param.id},{nameLock:param.nameLock}).exec(function update(err,updated){
 						// your change to the user was saved.
 						console.log("Success 1 : changement NameLock");
-						Log.create({ message: "Changement du nom de la porte en "+param.nameLock, lock: param.id, user: req.user.id}).exec(function createCB(err, created){
+						Log.create({ message: "Changement du nom du verrou "+ancienName+" en "+param.nameLock+"par l'administrateur"+req.user.firstname+" "+req.user.lastname, lock: param.id, user: req.user.id}).exec(function createCB(err, created){
 							console.log("Success 1 : Création log réussie");		
 						});
 						console.log(updated);
@@ -75,6 +75,7 @@ module.exports = {
 		return res.json("ok");
 	},
 	
+	///Affichage de la liste des utilisateurs pour une lock
 	ListUsersForLock: function(req,res){
 		var param = req.allParams();
 		console.log("id lock list= "+param.id);
@@ -88,6 +89,7 @@ module.exports = {
 		})
 	},
 
+/////////// Ajout d'une porte par un admin
 	AddLockForUser: function(req, res){
 		if(!req.isSocket)return res.json(401,{err:'is not a socket request'});
 		var param = req.allParams();
@@ -99,7 +101,7 @@ module.exports = {
 			Lock.subscribe(req.socket, created.id);
 			User.publishAdd(req.user.id, "locks", created.id);
 			sails.log('user' + req.user.id + 'has subscribe');
-			Log.create({ message: "Ajout de la porte "+created.id+" pour l'utilisateur "+req.user.lastname+" "+req.user.firstname, lock: created.id, user: req.user.id}).exec(function createCB(err, created){
+			Log.create({ message: "Création du verrou "+created.nameLock+" réussi ", lock: created.id, user: req.user.id}).exec(function createCB(err, created){
 						console.log("Success 1 : Création log réussie");		
 				});
 
@@ -109,7 +111,7 @@ module.exports = {
 	},
 
 
-
+/////////// Affichage des logs pour une porte
 	ShowLogsForLock: function(req,res){
 		var param = req.allParams();
 		var listLog = [];
