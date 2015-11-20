@@ -90,6 +90,7 @@ module.exports = {
 	},
 	
 	DeleteUser: function(req, res){
+		if(!req.isSocket)return res.json(401,{err:'is not a socket request'});
 		console.log("DeleteUser : ");
 		var param = req.allParams();
 		console.log('pass1 : '+ param.password);
@@ -99,11 +100,15 @@ module.exports = {
 				console.log("Error");
 			}
 			User.comparePassword(param.password,user, function(err,valid){
-				user.destroy(function (err) {
-                    if (err) { return done(err); }
-					console.log("Success");	
-					return res.json('Le compte à bien été suprimé');
-				});
+			var listLock = user.lock;
+			var idUser = req.user.id;
+				(listLock,idUser), function(err,user){
+			if(err){
+					user.destroy(function (err) {
+						if (err) { return done(err); }
+						console.log("Success 1");
+					});
+				}
 			});
 		});
 	},
