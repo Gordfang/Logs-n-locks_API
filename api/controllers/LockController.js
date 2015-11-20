@@ -4,7 +4,8 @@
  * @description :: Server-side logic for managing Locks
  * @help        :: See http://sailsjs.org/#!/documentation/concepts/Controllers
  */
-
+var moment = require('moment');
+ 
 module.exports = {
 	//// Changement Etat IsOpen
 	ChangeIsOpen: function(req,res){
@@ -114,7 +115,12 @@ module.exports = {
 		var listLog = [];
 		console.log("id lock: "+param.idLock);
 		Log.find({lock: param.idLock}).sort({id:'desc'}).exec(function (err,logs){
-			for(var i=0; i<10; i++){
+			var nblimit = logs.length;
+			if(nblimit > 10)
+				nblimit = 10;
+			for(var i=0; i<nblimit; i++){
+				console.log('test created : '+logs[i].createdAt);
+				logs[i].createdAt = moment(logs[i].createdAt).format('lll');
 				listLog[i] = logs[i];
 			}
 			console.log(listLog);
