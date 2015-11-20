@@ -86,13 +86,10 @@ module.exports = {
 		return res.json("ok");
 	},
 	
-<<<<<<< HEAD
+
 	// Changement de l'e-mail d'un utilisateur
-	ChangeMail: function(req,res){
-=======
-	// Changement e-mail
 	EditProfil: function(req,res){
->>>>>>> origin/master
+
 		var param = req.allParams();
 		console.log("id= "+req.user.id);
 		console.log("mail= "+param.email);
