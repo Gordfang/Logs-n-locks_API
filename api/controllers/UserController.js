@@ -137,22 +137,57 @@ module.exports = {
 		var param = req.allParams();
 		console.log("id user= "+req.user.id);
 		console.log("id lock= "+param.idLock);
-		User.findOne({id: req.user.id}).populate('locks').exec(function (err, user) {
-		if (err) return res.serverError(err);
-			if (!user) { console.log("Error 1 : Affichage Locks"); }
-			else {				
-				user.locks.remove(param.idLock);
-				User.publishRemove(req.user.id, "locks", param.idLock);
-				Lock.unsubscribe(req.socket, param.idLock);
-				sails.log('user' + req.user.id + 'has unsubscribe');
-				user.save(console.log);
-				Log.create({ message: "Supression de l'utilisateur "+req.user.lastname+" "+req.user.firstname+" pour la porte "+param.idLock, lock: param.idLock, user: req.user.id}).exec(function createCB(err, created){
-					console.log("Success 1 : Création log réussie");		
-				});
+
+
+
+		////////////////////////////////////////
+
+		var param = req.allParams();
+		console.log("tableau : "+param.listLock);
+		console.log("id user= "+param.idUser);
+		_.each(param.listLock, function (err, lock){
+			Lock.findOne({id: lock.id}).populate('users').exec(function (err, locK) {
+				if(lock.idAdmin == param.idUser){
+					User.publishRemove(param.idUser, "locks", );
+				}
 			}
 		})
+
+
+				
+				Lock.findOne({id: param.idLock}).populate('users').exec(function (err, lock) {
+					if(lock.idAdmin == user.id){
+						User.publishRemove(req.user.id, "locks", param.idLock);
+						_.each(lock.users, function(useR){
+							useR.locks.remove(param.idLock);
+							Lock.unsubscribe(req.socket, param.idLock);
+							sails.log('user' + useR.id + 'has unsubscribe');
+							useR.save(console.log);
+						});
+						Lock.destroy({id: lock.id}).exec(function (err, destroyed){
+							console.log(destroyed);
+						})
+					}
+					else{
+						user.locks.remove(param.idLock);
+						User.publishRemove(req.user.id, "locks", param.idLock);
+						Lock.unsubscribe(req.socket, param.idLock);
+						sails.log('user' + req.user.id + 'has unsubscribe');
+						user.save(console.log);
+					}
+					Log.create({ message: "Supression de l'utilisateur "+req.user.lastname+" "+req.user.firstname+" pour la porte "+param.idLock, lock: param.idLock, user: req.user.id}).exec(function createCB(err, created){
+						console.log("Success 1 : Création log réussie");		
+					});
+				}
+			
+		
+
+
+
+
+	/////////////////////////////////////////////////////
 		return res.json("ok");
-	},
+	},  bxwc b b<
 	
 	AddUserForLock: function(req, res){
 		var param = req.allParams();
