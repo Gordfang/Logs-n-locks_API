@@ -86,7 +86,7 @@ module.exports = {
 		return res.json("ok");
 	},
 	
-	// Changement profil
+	// Changement profil qui marche
 	EditProfil: function(req,res){
 		var param = req.allParams();
 		console.log("id= "+req.user.id);
