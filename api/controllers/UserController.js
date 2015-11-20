@@ -82,7 +82,7 @@ module.exports = {
 	},
 	
 	// Changement e-mail
-	ChangeMail: function(req,res){
+	EditProfil: function(req,res){
 		var param = req.allParams();
 		console.log("id= "+req.user.id);
 		console.log("mail= "+param.email);
@@ -91,6 +91,13 @@ module.exports = {
 			if (!user) { console.log("Error 1 : changement Password"); }
 			else {
 				// do stuff
+				user.firstame = param.firstame;
+				user.lastname = param.lastname;
+				user.save(function (err) {
+					if (err) return res.serverError(err);
+						// your change to the user was saved.
+						console.log("Success 1 : changement name");
+					});
 				User.find(param.email).exec(function (err, user){
 					if (err) return res.serverError(err);
 					if (user) { console.log("Error 1 : changement Mail déja utilisé"); }
@@ -128,7 +135,7 @@ module.exports = {
 		});		
 	},
 	
-	/*DeleteUser: function(req, res){
+	DeleteUser: function(req, res){
 		if(!req.isSocket)return res.json(401,{err:'is not a socket request'});
 		console.log("DeleteUser : ");
 		var param = req.allParams();
@@ -141,7 +148,7 @@ module.exports = {
 			User.comparePassword(param.password,user, function(err,valid){
 				var listLock = user.lock;
 				var idUser = req.user.id;
-				User.DestroyLinksUserLocks(listLock,idUser), function(err,user){
+				DestroyLinksUserLocks(reqSocket, listLock, idUser, function(err,user){
 					if(err){
 						user.destroy(function (err) {
 							if (err) { return done(err); }
@@ -151,7 +158,7 @@ module.exports = {
 				});
 			});			
 		});
-	},*/
+	},
 	
 	
 	ListLocksForUser: function(req,res){

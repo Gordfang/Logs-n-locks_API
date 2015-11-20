@@ -42,7 +42,7 @@ module.exports.routes = {
   'post /DeleteUser' : 'UserController.DeleteUser',
   
   'post /ChangePass': 'UserController.ChangePass',
-  'post /EditProfil': 'UserController.ChangeMail',
+  'post /EditProfil': 'UserController.EditProfil',
 
   'post /ListLocksForUser': 'UserController.ListLocksForUser',
   'post /ListUsersForLock': 'LockController.ListUsersForLock',
