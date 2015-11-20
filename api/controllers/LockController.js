@@ -94,13 +94,14 @@ module.exports = {
 		console.log("nom de la porte = "+param.nameLock);
 		Lock.create({nameLock: param.nameLock, isOpen: false, users: req.user.id, idAdmin: req.user.id}).exec(function createCB(err, created){
 			console.log("Success 1 : Création porte réussie");		
-			/*Log.create({ name: param.nameLock, lock: param.id}).exec(function createCB(err, created){
-				console.log("Success 1 : Création log réussie");		
-			});*/
 			console.log(created);
 			Lock.subscribe(req.socket, created.id);
 			User.publishAdd(req.user.id, "locks", created.id);
 			sails.log('user' + req.user.id + 'has subscribe');
+			Log.create({ message: "Ajout de la porte "+created.id+" pour l'utilisateur "+req.user.lastname+" "+req.user.firstname, lock: created.id, user: req.user.id}).exec(function createCB(err, created){
+						console.log("Success 1 : Création log réussie");		
+				});
+
 			return res.json(created);
 		});
 
