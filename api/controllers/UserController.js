@@ -91,31 +91,39 @@ module.exports = {
 	EditProfil: function(req,res){
 		var param = req.allParams();
 		console.log("id= "+req.user.id);
-		console.log("mail= "+param.email);
-		User.findOne(req.user.id).exec(function (err, user) {
-			if (err) return res.serverError(err);
-			if (!user) { console.log("Error 1 : changement Password"); }
+		console.log("fname= "+param.firstname);
+		console.log("lname= "+param.lastname);		
+		User.findOne({id:req.user.id}).exec(function (err, user) {			
+			if (err) 
+				return res.serverError(err);
+			if (!user) { 
+				console.log("Error 1 : not user"); 
+			}
 			else {
 				// do stuff
+				
 				user.firstame = param.firstame;
-				user.lastname = param.lastname;
+				user.lastname = param.lastname;	
+				if (user.email != param.email){
+					console.log("mail dif")
+					User.find(param.email).exec(function (err, usermail){
+						if (usermail) { 
+							console.log("Error 1 : changement Mail déja utilisé");
+							return res.json('error Mail');
+						}
+						else {
+							console.log("mail= "+param.email);	
+							console.log('mail : '+user.email)
+							user.email = param.email;						
+						}
+					});
+				}
 				user.save(function (err) {
 					if (err) return res.serverError(err);
 						// your change to the user was saved.
-						console.log("Success 1 : changement name");
-					});
-				User.find(param.email).exec(function (err, user){
-					if (err) return res.serverError(err);
-					if (user) { console.log("Error 1 : changement Mail déja utilisé"); }
-					else {
-						user.email = param.email;
-						user.save(function (err) {
-						if (err) return res.serverError(err);
-							// your change to the user was saved.
-							console.log("Success 1 : changement Mail");
-						});
-					}
-				});				
+					console.log("Success 1 : changement name");
+					return res.json('success');
+				});
 			}
 		})
 	},
