@@ -18,12 +18,12 @@ var bcrypt = require('bcryptjs');
 					console.log("locK");
 					console.log(locK);
 					if(lock.idAdmin == useR.id){
-						User.publishRemove(useR.id, "locks", locK.id);
+						Lock.publishDestroy(locK.id);
 						_.each(locK.users, function(Alluser){
 							Alluser.locks.remove(locK.id);
 							Lock.unsubscribe(reqSocket, locK.id);
 							sails.log('user ' + Alluser.id + ' has unsubscribe');
-							Alluser.save(console.log);
+							Alluser.save();
 						});
 						Log.create({ message: "Supression du verrou "+locK.nameLock+" par l'administrateur "+useR.firstname+" "+useR.lastname, lock: locK.id, user: useR.id}).exec(function createCB(err, created){
 							console.log("Success 1 : Création log réussie");		
@@ -38,7 +38,7 @@ var bcrypt = require('bcryptjs');
 						User.publishRemove(useR.id, "locks", locK.id);
 						Lock.unsubscribe(reqSocket, locK.id);
 						sails.log('user ' + useR.id + ' has unsubscribe');
-						useR.save(console.log);
+						useR.save();
 						Log.create({ message: "Supression de l'utilisateur "+useR.firstname+" "+useR.lastname+" sur le verrou "+locK.nameLock, lock: locK.id, user: useR.id}).exec(function createCB(err, created){
 							console.log("Success 1 : Création log réussie");		
 						});
@@ -268,6 +268,7 @@ module.exports = {
 			Lock.findOne(param.idLock).exec(function (err, lock) {
 				user.locks.remove(lock.id);
 				user.save();
+				User.publishRemove(user.id, "locks", lock.id);	
 				_.each(Lock.subscribers(lock.id), function(sub){
 					if(sub.id == user.socketId){
 						Lock.unsubscribe(sub, lock.id);
@@ -276,7 +277,6 @@ module.exports = {
 				Log.create({ message: "Supression de l'utilisateur "+user.firstname+" "+user.lastname+" au verrou "+lock.id+" par l'administrateur", lock: lock.id, user: req.user.id}).exec(function createCB(err, created){
 					console.log("Success 1 : Création log réussie");		
 				});	
-				User.publishRemove(user.id, "locks", lock.id);	
 				return res.json('ok');			
 			});
 		})
