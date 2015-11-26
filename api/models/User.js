@@ -9,6 +9,11 @@ var bcrypt = require('bcryptjs');
 module.exports = {
 
   attributes: {
+	id:{
+		primaryKey : true,
+		autoIncrement: true,
+		type: "integer",
+	},
 	lastname:{
 		type: "string",
 		required: true,

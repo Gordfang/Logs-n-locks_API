@@ -7,7 +7,7 @@
 var bcrypt = require('bcryptjs');
 
 //////fonction pour supprimer des portes ou des liens entre un user et une porte
-	function DestroyLinksUserLocks(reqSocket, listLock, idUser){
+	function DestroyLinksUserLocks(reqSocket,listLock, idUser, callback){		
 		console.log("tableau : "+listLock);
 		console.log("id user= "+idUser);
 		User.findOne({id: idUser}).exec(function (err, useR) {
@@ -19,11 +19,11 @@ var bcrypt = require('bcryptjs');
 					console.log(locK);
 					if(lock.idAdmin == useR.id){
 						User.publishRemove(useR.id, "locks", locK.id);
-						_.each(locK.users, function(useR){
-							useR.locks.remove(locK.id);
+						_.each(locK.users, function(Alluser){
+							Alluser.locks.remove(locK.id);
 							Lock.unsubscribe(reqSocket, locK.id);
-							sails.log('user' + useR.id + 'has unsubscribe');
-							useR.save(console.log);
+							sails.log('user ' + Alluser.id + ' has unsubscribe');
+							Alluser.save(console.log);
 						});
 						Log.create({ message: "Supression du verrou "+locK.nameLock+" par l'administrateur "+useR.firstname+" "+useR.lastname, lock: locK.id, user: useR.id}).exec(function createCB(err, created){
 							console.log("Success 1 : Création log réussie");		
@@ -37,7 +37,7 @@ var bcrypt = require('bcryptjs');
 						useR.locks.remove(locK.id);
 						User.publishRemove(useR.id, "locks", locK.id);
 						Lock.unsubscribe(reqSocket, locK.id);
-						sails.log('user' + useR.id + 'has unsubscribe');
+						sails.log('user ' + useR.id + ' has unsubscribe');
 						useR.save(console.log);
 						Log.create({ message: "Supression de l'utilisateur "+useR.firstname+" "+useR.lastname+" sur le verrou "+locK.nameLock, lock: locK.id, user: useR.id}).exec(function createCB(err, created){
 							console.log("Success 1 : Création log réussie");		
@@ -45,7 +45,8 @@ var bcrypt = require('bcryptjs');
 					}
 					
 				});
-			})
+			});
+			callback('',useR);
 		});
 	}
 
@@ -145,22 +146,23 @@ module.exports = {
 		console.log("DeleteUser : ");
 		var param = req.allParams();
 		console.log('pass1 : '+ param.password);
-		User.findOne({id:req.user.id}, function(err,user){
+		User.findOne({id: idUser}).populate('locks').exec(function (err, user){
 			if(err){
 				return res.json('erreur mot de passe');
 				console.log("Error");
 			}
 			User.comparePassword(param.password,user, function(err,valid){
-				var listLock = user.lock;
+				var listLock = user.locks
 				var idUser = req.user.id;
-				DestroyLinksUserLocks(req.socket, listLock, idUser, function(err,user){
-					if(err){
-						user.destroy(function (err) {
-							if (err) { return done(err); }
-							console.log("Success 1");
-						});
-					}
-				});
+				console.log("Password Success 1");
+				DestroyLinksUserLocks(req.socket,listLock, idUser, function(err,user){
+					if(err){return res.json('error');}			
+					user.destroy(function (err) {
+						if (err) { return done(err); }
+						console.log("Success 1");
+						return res.json('success');
+					});
+				});				
 			});			
 		});
 	},
@@ -198,11 +200,12 @@ module.exports = {
 			console.log(useR.locks);
 			for(var i=0; i<useR.locks.length; i++){
 				console.log(useR.locks.length);
-				if(param.idLock == useR.locks[i].id) listLock.push(useR.locks[i]);
+				if(param.idLock == useR.locks[i].id) 
+					listLock.push(useR.locks[i]);
 			}
 			console.log(listLock);
 			DestroyLinksUserLocks(req.socket, listLock, idUser, function (err, valid){
-				concole.log(valid);
+				console.log('sucess');
 			});
 		});
 		return res.json("ok");
