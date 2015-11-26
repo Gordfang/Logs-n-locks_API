@@ -51,6 +51,7 @@ module.exports.routes = {
  'get /api/refresh': 'AuthentificationController.refresh',
 
   'post /DeleteLockForUser' : 'UserController.DeleteLockForUser',
+  'post /DeleteUserForLock' : 'UserController.DeleteUserForLock',
 
   'post /AddLockForUser' : 'LockController.AddLockForUser',
   'post /AddUserForLock' : 'UserController.AddUserForLock',

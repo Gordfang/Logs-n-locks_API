@@ -49,6 +49,9 @@ module.exports = {
 		collection: 'log',
 		via: 'lock'
 	},
+	socketId:{
+		type: 'string'
+	}, 
 	toJson: function(){
 		var obj = this.toObject();
 		delete obj.password;
