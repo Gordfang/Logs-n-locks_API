@@ -153,7 +153,7 @@ module.exports = {
 			User.comparePassword(param.password,user, function(err,valid){
 				var listLock = user.lock;
 				var idUser = req.user.id;
-				DestroyLinksUserLocks(reqSocket, listLock, idUser, function(err,user){
+				DestroyLinksUserLocks(req.socket, listLock, idUser, function(err,user){
 					if(err){
 						user.destroy(function (err) {
 							if (err) { return done(err); }
